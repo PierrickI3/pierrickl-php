@@ -26,10 +26,6 @@
 #  Advanced parameter, sets the provider for the exec resource that extracts
 #  the ZIP file, defaults to 'powershell'.
 #
-# [*options*]
-#  Advanced parameter, sets the extraction options for the `Folder.CopyHere`
-#  method:
-#
 #  http://msdn.microsoft.com/en-us/library/windows/desktop/bb787866.
 #
 #  Defaults to 20, which is sum of:
@@ -51,7 +47,6 @@ define php::unzip(
   $unless           = undef,
   $zipfile          = $name,
   $provider         = 'powershell',
-  $options          = '20',
   $command_template = 'php/unzip.ps1.erb',
   $timeout          = 300,
 ) {
@@ -68,6 +63,8 @@ define php::unzip(
     unless      => $unless,
     provider    => $provider,
     timeout     => $timeout,
+    tries       => 3,
+    try_sleep   => 30,
   }
 }
 
@@ -166,35 +163,81 @@ class php::install (
       download_file('php-5.6.12-nts-Win32-VC11-x64.zip', 'http://windows.php.net/downloads/releases/', $cache_dir, '', '')
 
       # Unzip to C:\PHP
-      php::unzip { "${cache_dir}/php-5.6.12-nts-Win32-VC11-x64.zip":
+      php::unzip {"${cache_dir}/php-5.6.12-nts-Win32-VC11-x64.zip":
         destination => 'C:/PHP',
         creates     => 'C:/PHP/php.ini-production',
       }
 
       # Add C:\PHP to PATH
-      php::path { 'C:\\PHP':
+      php::path {'C:\PHP':
         require => Unzip["${cache_dir}/php-5.6.12-nts-Win32-VC11-x64.zip"],
       }
       
       # Copy php.ini template
-      file { 'C:\\PHP\\php.ini':
+      file {'C:\\PHP\\php.ini':
         ensure  => file,
         content => template('php/php.ini.erb'),
         require => Unzip["${cache_dir}/php-5.6.12-nts-Win32-VC11-x64.zip"],
       }
 
-
       # Create IIS FactCGI process pool: %windir%\system32\inetsrv\appcmd set config /section:system.webServer/fastCGI ^/+[fullPath='c:\PHP\php-cgi.exe']
+      exec{'create-fastcgi-process-pool':
+        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd set config /section:system.webServer/fastCGI ^/+[fullPath='c:\\PHP\\php-cgi.exe']\"",
+        path    => $::path,
+        cwd     => $::system32,
+        require => File['C:\\PHP\\php.ini'],
+      }
+
       # Create handle mapping for PHP requests: %windir%\system32\inetsrv\appcmd set config /section:system.webServer/handlers ^/+[name='PHP_via_FastCGI', path='*.php',verb='*',modules='FastCgiModule',^scriptProcessor='c:\PHP\php-cgi.exe',resourceType='Either']
+      exec{'create-handle-mapping':
+        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd set config /section:system.webServer/handlers ^/+[name='PHP_via_FastCGI', path='*.php',verb='*',modules='FastCgiModule',^scriptProcessor='c:\\php\\php-cgi.exe',resourceType='Either']\"",
+        path    => $::path,
+        cwd     => $::system32,
+        require => File['C:\\PHP\\php.ini'],
+      }
+
+      # Set index.php as the default document: %windir%\system32\inetsrv\appcmd.exe set config ^-section:system.webServer/defaultDocument /+"files.[value='index.php']" ^/commit:apphost
+      exec{'set-index-php-as-default-document':
+        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config ^-section:system.webServer/defaultDocument /+\"files.[value='index.php']\" ^/commit:apphost\"",
+        path    => $::path,
+        cwd     => $::system32,
+        require => File['C:\\PHP\\php.ini'],
+      }
+
+      # Configure FastCGI max instances: %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi ^/[fullPath='c:\php\php-cgi.exe'].instanceMaxRequests:10000
+      exec{'configure-fastcgi-max-instances':
+        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config -section:system.webServer/fastCgi ^/[fullPath='c:\\php\\php-cgi.exe'].instanceMaxRequests:10000\"",
+        path    => $::path,
+        cwd     => $::system32,
+        require => File['C:\\PHP\\php.ini'],
+      }
+
+      # Configure PHP recycling: %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi ^/+"[fullPath='C:\php\php-cgi.exe'].environmentVariables.^[name='PHP_FCGI_MAX_REQUESTS',value='10000']"
+      exec{'configure-php-recycling':
+        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config -section:system.webServer/fastCgi ^/+\"[fullPath='C:\\php\\php-cgi.exe'].environmentVariables.^[name='PHP_FCGI_MAX_REQUESTS',value='10000']\"\"",
+        path    => $::path,
+        cwd     => $::system32,
+        require => File['C:\\PHP\\php.ini'],
+      }
+
+      # Reset IIS
+      exec{'reset-iis':
+        command => "cmd.exe /c \"iisreset\"",
+        path    => $::path,
+        cwd     => $::system32,
+        require => [
+          Exec['create-fastcgi-process-pool'],
+          Exec['create-handle-mapping'],
+          Exec['set-index-php-as-default-document'],
+          Exec['configure-fastcgi-max-instances'],
+          Exec['configure-php-recycling'],
+        ],
+      }
+
       # (optional) Grant write permissions to a folder: icacls <folder> /grant IUSR:(OI)(CI)(M)
-      # (optional) Set index.php as the default document: %windir%\system32\inetsrv\appcmd.exe set config ^-section:system.webServer/defaultDocument /+"files.[value='index.php']" ^/commit:apphost
-      # (optional) Configure FastCGI and PHP recycling: 
-      #   %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi ^/[fullPath='c:\php\php-cgi.exe'].instanceMaxRequests:10000
-      #   %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi ^/+"[fullPath='C:\php\php-cgi.exe'].environmentVariables.^[name='PHP_FCGI_MAX_REQUESTS',value='10000']"
       # (optional) Configure FastCGI timeout:
       #   %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi ^/[fullPath='C:\php\php-cgi.exe',arguments=''].activityTimeout:"90"  /commit:apphost
       #   %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi ^/[fullPath='C:\php\php-cgi.exe',arguments=''].requestTimeout:"90"  /commit:apphost
-      # Run iisreset
     }
     default:
     {
