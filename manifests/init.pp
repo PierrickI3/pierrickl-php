@@ -144,9 +144,7 @@ class php::install (
   {
     installed:
     {
-      # Check if php is installed? Which version?
-
-      # Check if Microsoft C++ runtime is installed. If not, download and install it (http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe)
+      # Check if Microsoft C++ runtime is installed. If not, download and install it
       debug('Download Microsoft C++ runtime')
       download_file('vcredist_x64.exe', 'http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/', $cache_dir, '', '')
 
