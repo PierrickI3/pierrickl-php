@@ -155,7 +155,7 @@ class php::install (
         command => "cmd.exe /c \"${cache_dir}\\vcredist_x64.exe /q /norestart",
         path    => $::path,
         cwd     => $::system32,
-        unless  => 'reg query HKLM\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\10.0\VC\VCRedist\x64 /f 1', # don't install it if it's already there
+        unless  => 'reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\11.0\VC\Runtimes\x64 /v Installed /f 1',
       }
 
       # Download PHP (http://windows.php.net/downloads/releases/php-5.6.12-nts-Win32-VC11-x64.zip)
@@ -180,43 +180,48 @@ class php::install (
         require => Unzip["${cache_dir}/php-5.6.12-nts-Win32-VC11-x64.zip"],
       }
 
-      # Create IIS FactCGI process pool: %windir%\system32\inetsrv\appcmd set config /section:system.webServer/fastCGI ^/+[fullPath='c:\PHP\php-cgi.exe']
+      # Create IIS FactCGI process pool
       exec{'create-fastcgi-process-pool':
-        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd set config /section:system.webServer/fastCGI ^/+[fullPath='c:\\PHP\\php-cgi.exe']\"",
+        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd set config /section:system.webServer/fastCGI /+[fullPath='c:\\PHP\\php-cgi.exe']\"",
         path    => $::path,
         cwd     => $::system32,
+        unless  => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd list config /section:system.webServer/fastCGI | findstr /l php\"",
         require => File['C:\\PHP\\php.ini'],
       }
 
-      # Create handle mapping for PHP requests: %windir%\system32\inetsrv\appcmd set config /section:system.webServer/handlers ^/+[name='PHP_via_FastCGI', path='*.php',verb='*',modules='FastCgiModule',^scriptProcessor='c:\PHP\php-cgi.exe',resourceType='Either']
+      # Create handle mapping for PHP requests
       exec{'create-handle-mapping':
-        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd set config /section:system.webServer/handlers ^/+[name='PHP_via_FastCGI', path='*.php',verb='*',modules='FastCgiModule',^scriptProcessor='c:\\php\\php-cgi.exe',resourceType='Either']\"",
+        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd set config /section:system.webServer/handlers /+[name='PHP_via_FastCGI',path='*.php',verb='*',modules='FastCgiModule',scriptProcessor='C:\\PHP\\php-cgi.exe',resourceType='Unspecified']\" /commit:apphost",
         path    => $::path,
         cwd     => $::system32,
+        unless  => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd list config /section:system.webServer/handlers | findstr /l PHP_via_FastCGI\"",
         require => File['C:\\PHP\\php.ini'],
       }
 
-      # Set index.php as the default document: %windir%\system32\inetsrv\appcmd.exe set config ^-section:system.webServer/defaultDocument /+"files.[value='index.php']" ^/commit:apphost
+      # Set index.php as the default document
       exec{'set-index-php-as-default-document':
-        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config ^-section:system.webServer/defaultDocument /+\"files.[value='index.php']\" ^/commit:apphost\"",
+        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config -section:system.webServer/defaultDocument /+\"files.[value='index.php']\" /commit:apphost\"",
         path    => $::path,
         cwd     => $::system32,
+        unless  => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd list config /section:system.webServer/defaultDocument | findstr /l php\"",
         require => File['C:\\PHP\\php.ini'],
       }
 
-      # Configure FastCGI max instances: %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi ^/[fullPath='c:\php\php-cgi.exe'].instanceMaxRequests:10000
+      # Configure FastCGI max instances
       exec{'configure-fastcgi-max-instances':
-        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config -section:system.webServer/fastCgi ^/[fullPath='c:\\php\\php-cgi.exe'].instanceMaxRequests:10000\"",
+        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config -section:system.webServer/fastCgi /[fullPath='C:\\PHP\\php-cgi.exe'].instanceMaxRequests:10000\" /commit:apphost",
         path    => $::path,
         cwd     => $::system32,
+        unless  => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd list config /section:system.webServer/fastCgi | findstr /l 10000\"",
         require => File['C:\\PHP\\php.ini'],
       }
 
-      # Configure PHP recycling: %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi ^/+"[fullPath='C:\php\php-cgi.exe'].environmentVariables.^[name='PHP_FCGI_MAX_REQUESTS',value='10000']"
+      # Configure PHP recycling
       exec{'configure-php-recycling':
-        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config -section:system.webServer/fastCgi ^/+\"[fullPath='C:\\php\\php-cgi.exe'].environmentVariables.^[name='PHP_FCGI_MAX_REQUESTS',value='10000']\"\"",
+        command => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd.exe set config -section:system.webServer/fastCgi /+\"[fullPath='C:\\PHP\\php-cgi.exe'].environmentVariables.[name='PHP_FCGI_MAX_REQUESTS',value='10000']\" /commit:apphost\"",
         path    => $::path,
         cwd     => $::system32,
+        unless  => "cmd.exe /c \"%windir%\\system32\\inetsrv\\appcmd list config /section:system.webServer/fastCgi | findstr /l PHP_FCGI_MAX_REQUESTS\"",
         require => File['C:\\PHP\\php.ini'],
       }
 
@@ -234,10 +239,6 @@ class php::install (
         ],
       }
 
-      # (optional) Grant write permissions to a folder: icacls <folder> /grant IUSR:(OI)(CI)(M)
-      # (optional) Configure FastCGI timeout:
-      #   %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi ^/[fullPath='C:\php\php-cgi.exe',arguments=''].activityTimeout:"90"  /commit:apphost
-      #   %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi ^/[fullPath='C:\php\php-cgi.exe',arguments=''].requestTimeout:"90"  /commit:apphost
     }
     default:
     {
