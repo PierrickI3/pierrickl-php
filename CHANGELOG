@@ -1,1 +1,4 @@
 2015-08-28: Original commit
+2015-08-31: Fixed Visual C++ 2012 Redistributable check to avoid installing it again if it's already there
+2015-08-31: Added unless to all configuration changes
+2015-08-31: Change php.ini settings based on SugarCRM tips when used with MSSQL

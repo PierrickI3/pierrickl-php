@@ -193,7 +193,7 @@ engine = On
 ; generally recommended that <?php and ?> should be used and that this feature
 ; should be disabled, as enabling it may result in issues when generating XML
 ; documents, however this remains supported for backward compatibility reasons.
-; Note that this directive does not control the <?= shorthand tag, which can be
+; Note that this directive does not control the < ? = shorthand tag, which can be
 ; used regardless of this directive.
 ; Default Value: On
 ; Development Value: Off
@@ -211,11 +211,11 @@ precision = 14
 
 ; Output buffering is a mechanism for controlling how much output data
 ; (excluding headers and cookies) PHP should keep internally before pushing that
-; data to the client. If your application's output exceeds this setting, PHP
+; data to the client. If your application''s output exceeds this setting, PHP
 ; will send that data in chunks of roughly the size you specify.
 ; Turning on this setting and managing its maximum buffer size can yield some
 ; interesting side-effects depending on your application and web server.
-; You may be able to send headers and cookies after you've already sent output
+; You may be able to send headers and cookies after you''ve already sent output
 ; through print or echo. You also may see performance benefits if your server is
 ; emitting less packets due to buffered output versus PHP streaming the output
 ; as it gets it. On production servers, 4096 bytes is a good setting for performance
@@ -278,10 +278,10 @@ zlib.output_compression = Off
 ; Note: This directive is hardcoded to On for the CLI SAPI
 implicit_flush = Off
 
-; The unserialize callback function will be called (with the undefined class'
+; The unserialize callback function will be called (with the undefined class''
 ; name as parameter), if the unserializer finds an undefined class
 ; which should be instantiated. A warning appears if the specified function is
-; not defined, or if the function doesn't include/implement the missing class.
+; not defined, or if the function doesn''t include/implement the missing class.
 ; So only set this entry, if you really want to implement such a
 ; callback-function.
 unserialize_callback_func =
@@ -307,7 +307,7 @@ disable_functions =
 ; http://php.net/disable-classes
 disable_classes =
 
-; Colors for Syntax Highlighting mode.  Anything that's acceptable in
+; Colors for Syntax Highlighting mode.  Anything that''s acceptable in
 ; <span style="color: ???????"> would work.
 ; http://php.net/syntax-highlighting
 ;highlight.string  = #DD0000
@@ -318,7 +318,7 @@ disable_classes =
 
 ; If enabled, the request will be allowed to complete even if the user aborts
 ; the request. Consider enabling it if executing long requests, which may end up
-; being interrupted by the user or a browser timing out. PHP's default behavior
+; being interrupted by the user or a browser timing out. PHP''s default behavior
 ; is to disable this feature.
 ; http://php.net/ignore-user-abort
 ;ignore_user_abort = On
@@ -371,7 +371,7 @@ expose_php = On
 ; Note: This directive is hardcoded to 0 for the CLI SAPI
 max_execution_time = 30
 
-; Maximum amount of time each script may spend parsing request data. It's a good
+; Maximum amount of time each script may spend parsing request data. It''s a good
 ; idea to limit this time on productions servers in order to eliminate unexpectedly
 ; long running scripts.
 ; Note: This directive is hardcoded to -1 for the CLI SAPI
@@ -404,8 +404,8 @@ memory_limit = 128M
 ; By default, PHP is set to take action on all errors, notices and warnings EXCEPT
 ; those related to E_NOTICE and E_STRICT, which together cover best practices and
 ; recommended coding standards in PHP. For performance reasons, this is the
-; recommend error reporting setting. Your production server shouldn't be wasting
-; resources complaining about best practices and coding standards. That's what
+; recommend error reporting setting. Your production server shouldn''t be wasting
+; resources complaining about best practices and coding standards. That''s what
 ; development servers and development settings are for.
 ; Note: The php.ini-development file has this setting as E_ALL. This
 ; means it pretty much reports everything which is exactly what you want during
@@ -418,15 +418,15 @@ memory_limit = 128M
 ; E_WARNING         - run-time warnings (non-fatal errors)
 ; E_PARSE           - compile-time parse errors
 ; E_NOTICE          - run-time notices (these are warnings which often result
-;                     from a bug in your code, but it's possible that it was
+;                     from a bug in your code, but it''s possible that it was
 ;                     intentional (e.g., using an uninitialized variable and
 ;                     relying on the fact it is automatically initialized to an
 ;                     empty string)
 ; E_STRICT          - run-time notices, enable to have PHP suggest changes
 ;                     to your code which will ensure the best interoperability
 ;                     and forward compatibility of your code
-; E_CORE_ERROR      - fatal errors that occur during PHP's initial startup
-; E_CORE_WARNING    - warnings (non-fatal errors) that occur during PHP's
+; E_CORE_ERROR      - fatal errors that occur during PHP''s initial startup
+; E_CORE_WARNING    - warnings (non-fatal errors) that occur during PHP''s
 ;                     initial startup
 ; E_COMPILE_ERROR   - fatal compile-time errors
 ; E_COMPILE_WARNING - compile-time warnings (non-fatal errors)
@@ -465,8 +465,8 @@ error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT
 ; http://php.net/display-errors
 display_errors = Off
 
-; The display of errors which occur during PHP's startup sequence are handled
-; separately from display_errors. PHP's default behavior is to suppress those
+; The display of errors which occur during PHP''s startup sequence are handled
+; separately from display_errors. PHP''s default behavior is to suppress those
 ; errors from clients. Turning the display of startup errors on can be useful in
 ; debugging configuration problems. We strongly recommend you
 ; set this to 'off' for production servers.
@@ -543,7 +543,7 @@ html_errors = On
 ; You can download a copy of the PHP manual from http://php.net/docs
 ; and change docref_root to the base URL of your local copy including the
 ; leading '/'. You must also specify the file extension being used including
-; the dot. PHP's default behavior is to leave these settings empty, in which
+; the dot. PHP''s default behavior is to leave these settings empty, in which
 ; case no links to documentation are generated.
 ; Note: Never use this feature for production boxes.
 ; http://php.net/docref-root
@@ -553,19 +553,19 @@ html_errors = On
 ; http://php.net/docref-ext
 ;docref_ext = .html
 
-; String to output before an error message. PHP's default behavior is to leave
+; String to output before an error message. PHP''s default behavior is to leave
 ; this setting blank.
 ; http://php.net/error-prepend-string
 ; Example:
-;error_prepend_string = "<span style='color: #ff0000'>"
+;error_prepend_string = "<span style=''color: #ff0000'>"
 
-; String to output after an error message. PHP's default behavior is to leave
+; String to output after an error message. PHP''s default behavior is to leave
 ; this setting blank.
 ; http://php.net/error-append-string
 ; Example:
 ;error_append_string = "</span>"
 
-; Log errors to specified file. PHP's default behavior is to leave this value
+; Log errors to specified file. PHP''s default behavior is to leave this value
 ; empty.
 ; http://php.net/error-log
 ; Example:
@@ -583,13 +583,13 @@ html_errors = On
 ;;;;;;;;;;;;;;;;;
 
 ; The separator used in PHP generated URLs to separate arguments.
-; PHP's default setting is "&".
+; PHP''s default setting is "&".
 ; http://php.net/arg-separator.output
 ; Example:
 ;arg_separator.output = "&amp;"
 
 ; List of separator(s) used by PHP to parse input URLs into variables.
-; PHP's default setting is "&".
+; PHP''s default setting is "&".
 ; NOTE: Every character in this directive is considered as separator!
 ; http://php.net/arg-separator.input
 ; Example:
@@ -636,7 +636,7 @@ request_order = "GP"
 ; http://php.net/register-argc-argv
 register_argc_argv = Off
 
-; When enabled, the ENV, REQUEST and SERVER variables are created when they're
+; When enabled, the ENV, REQUEST and SERVER variables are created when they''re
 ; first used (Just In Time) instead of when the script starts. If these
 ; variables are not used within a script, having this directive on will result
 ; in a performance gain. The PHP directive register_argc_argv must be disabled
@@ -646,7 +646,7 @@ auto_globals_jit = On
 
 ; Whether PHP will read the POST data.
 ; This option is enabled by default.
-; Most likely, you won't want to disable this option globally. It causes $_POST
+; Most likely, you won''t want to disable this option globally. It causes $_POST
 ; and $_FILES to always be empty; the only way you will be able to read the
 ; POST data will be through the php://input stream wrapper. This can be useful
 ; to proxy requests or to process the POST data in a memory efficient fashion.
@@ -671,11 +671,11 @@ auto_append_file =
 ; the Content-type: header.  To disable sending of the charset, simply
 ; set it to be empty.
 ;
-; PHP's built-in default is text/html
+; PHP''s built-in default is text/html
 ; http://php.net/default-mimetype
 default_mimetype = "text/html"
 
-; PHP's default character set is set to UTF-8.
+; PHP''s default character set is set to UTF-8.
 ; http://php.net/default-charset
 default_charset = "UTF-8"
 
@@ -696,7 +696,7 @@ default_charset = "UTF-8"
 ; http://php.net/output-encoding
 ;output_encoding =
 
-; Always populate the $HTTP_RAW_POST_DATA variable. PHP's default behavior is
+; Always populate the $HTTP_RAW_POST_DATA variable. PHP''s default behavior is
 ; to disable this feature and it will be removed in a future version.
 ; If post reading is disabled through enable_post_data_reading,
 ; $HTTP_RAW_POST_DATA is *NOT* populated.
@@ -713,7 +713,7 @@ default_charset = "UTF-8"
 ; Windows: "\path1;\path2"
 ;include_path = ".;c:\php\includes"
 ;
-; PHP's default setting for include_path is ".;/path/to/php/pear"
+; PHP''s default setting for include_path is ".;/path/to/php/pear"
 ; http://php.net/include-path
 
 ; The root of the PHP pages, used only if nonempty.
@@ -753,7 +753,7 @@ enable_dl = Off
 cgi.force_redirect = 0
 
 ; if cgi.nph is enabled it will force cgi to always sent Status: 200 with
-; every request. PHP's default behavior is to disable this feature.
+; every request. PHP''s default behavior is to disable this feature.
 ;cgi.nph = 1
 
 ; if cgi.force_redirect is turned on, and you are not running under Apache or Netscape
@@ -763,7 +763,7 @@ cgi.force_redirect = 0
 ; http://php.net/cgi.redirect-status-env
 ;cgi.redirect_status_env =
 
-; cgi.fix_pathinfo provides *real* PATH_INFO/PATH_TRANSLATED support for CGI.  PHP's
+; cgi.fix_pathinfo provides *real* PATH_INFO/PATH_TRANSLATED support for CGI.  PHP''s
 ; previous behaviour was to set PATH_TRANSLATED to SCRIPT_FILENAME, and to not grok
 ; what PATH_INFO is.  For more information on PATH_INFO, see the cgi specs.  Setting
 ; this to 1 will cause PHP CGI to fix its paths to conform to the spec.  A setting
@@ -780,7 +780,7 @@ cgi.fix_pathinfo=1
 ; http://php.net/fastcgi.impersonate
 fastcgi.impersonate = 1
 
-; Disable logging through FastCGI connection. PHP's default behavior is to enable
+; Disable logging through FastCGI connection. PHP''s default behavior is to enable
 ; this feature.
 fastcgi.logging = 0
 
@@ -807,7 +807,7 @@ file_uploads = On
 
 ; Maximum allowed size for uploaded files.
 ; http://php.net/upload-max-filesize
-upload_max_filesize = 2M
+upload_max_filesize = 20M
 
 ; Maximum number of files that can be uploaded via a single request
 max_file_uploads = 20
@@ -824,12 +824,12 @@ allow_url_fopen = On
 ; http://php.net/allow-url-include
 allow_url_include = Off
 
-; Define the anonymous ftp password (your email address). PHP's default setting
+; Define the anonymous ftp password (your email address). PHP''s default setting
 ; for this is empty.
 ; http://php.net/from
 ;from="john@doe.com"
 
-; Define the User-Agent string. PHP's default setting for this is empty.
+; Define the User-Agent string. PHP''s default setting for this is empty.
 ; http://php.net/user-agent
 ;user_agent="PHP"
 
@@ -958,7 +958,7 @@ cli_server.color = On
 ; Use of this INI entry is deprecated, use global output_encoding instead.
 ; If empty, default_charset or output_encoding or iconv.output_encoding is used.
 ; The precedence is: default_charset < output_encoding < iconv.output_encoding
-; To use an output encoding conversion, iconv's output handler must be set
+; To use an output encoding conversion, iconv''s output handler must be set
 ; otherwise output encoding conversion cannot be performed.
 ;iconv.output_encoding =
 
@@ -1122,7 +1122,7 @@ ibase.dateformat = "%Y-%m-%d"
 ibase.timeformat = "%H:%M:%S"
 
 [MySQL]
-; Allow accessing, from PHP's perspective, local files with LOAD DATA statements
+; Allow accessing, from PHP''s perspective, local files with LOAD DATA statements
 ; http://php.net/mysql.allow_local_infile
 mysql.allow_local_infile = On
 
@@ -1154,17 +1154,17 @@ mysql.default_port =
 ; http://php.net/mysql.default-socket
 mysql.default_socket =
 
-; Default host for mysql_connect() (doesn't apply in safe mode).
+; Default host for mysql_connect() (doesn''t apply in safe mode).
 ; http://php.net/mysql.default-host
 mysql.default_host =
 
-; Default user for mysql_connect() (doesn't apply in safe mode).
+; Default user for mysql_connect() (doesn''t apply in safe mode).
 ; http://php.net/mysql.default-user
 mysql.default_user =
 
-; Default password for mysql_connect() (doesn't apply in safe mode).
+; Default password for mysql_connect() (doesn''t apply in safe mode).
 ; Note that this is generally a *bad* idea to store passwords in this file.
-; *Any* user with PHP access can run 'echo get_cfg_var("mysql.default_password")
+; *Any* user with PHP access can run ''echo get_cfg_var("mysql.default_password")
 ; and reveal this password!  And of course, any users with read access to this
 ; file will be able to reveal the password as well.
 ; http://php.net/mysql.default-password
@@ -1185,7 +1185,7 @@ mysql.trace_mode = Off
 ; http://php.net/mysqli.max-persistent
 mysqli.max_persistent = -1
 
-; Allow accessing, from PHP's perspective, local files with LOAD DATA statements
+; Allow accessing, from PHP''s perspective, local files with LOAD DATA statements
 ; http://php.net/mysqli.allow_local_infile
 ;mysqli.allow_local_infile = On
 
@@ -1213,17 +1213,17 @@ mysqli.default_port = 3306
 ; http://php.net/mysqli.default-socket
 mysqli.default_socket =
 
-; Default host for mysql_connect() (doesn't apply in safe mode).
+; Default host for mysql_connect() (doesn''t apply in safe mode).
 ; http://php.net/mysqli.default-host
 mysqli.default_host =
 
-; Default user for mysql_connect() (doesn't apply in safe mode).
+; Default user for mysql_connect() (doesn''t apply in safe mode).
 ; http://php.net/mysqli.default-user
 mysqli.default_user =
 
-; Default password for mysqli_connect() (doesn't apply in safe mode).
+; Default password for mysqli_connect() (doesn''t apply in safe mode).
 ; Note that this is generally a *bad* idea to store passwords in this file.
-; *Any* user with PHP access can run 'echo get_cfg_var("mysqli.default_pw")
+; *Any* user with PHP access can run ''echo get_cfg_var("mysqli.default_pw")
 ; and reveal this password!  And of course, any users with read access to this
 ; file will be able to reveal the password as well.
 ; http://php.net/mysqli.default-pw
@@ -1411,7 +1411,7 @@ session.save_handler = files
 ;     session.save_path = "N;MODE;/path"
 ;
 ; where MODE is the octal representation of the mode. Note that this
-; does not overwrite the process's umask.
+; does not overwrite the process''s umask.
 ; http://php.net/session.save-path
 ;session.save_path = "/tmp"
 
@@ -1431,9 +1431,9 @@ session.use_cookies = 1
 ;session.cookie_secure =
 
 ; This option forces PHP to fetch and use a cookie for storing and maintaining
-; the session id. We encourage this operation as it's very helpful in combating
+; the session id. We encourage this operation as it''s very helpful in combating
 ; session hijacking when not specifying and managing your own session id. It is
-; not the be-all and end-all of session hijacking defense, but it's a good start.
+; not the be-all and end-all of session hijacking defense, but it''s a good start.
 ; http://php.net/session.use-only-cookies
 session.use_only_cookies = 1
 
@@ -1465,7 +1465,7 @@ session.cookie_httponly =
 ; http://php.net/session.serialize-handler
 session.serialize_handler = php
 
-; Defines the probability that the 'garbage collection' process is started
+; Defines the probability that the ''garbage collection'' process is started
 ; on every session initialization. The probability is calculated by using
 ; gc_probability/gc_divisor. Where session.gc_probability is the numerator
 ; and gc_divisor is the denominator in the equation. Setting this value to 1
@@ -1477,7 +1477,7 @@ session.serialize_handler = php
 ; http://php.net/session.gc-probability
 session.gc_probability = 1
 
-; Defines the probability that the 'garbage collection' process is started on every
+; Defines the probability that the ''garbage collection'' process is started on every
 ; session initialization. The probability is calculated by using the following equation:
 ; gc_probability/gc_divisor. Where session.gc_probability is the numerator and
 ; session.gc_divisor is the denominator in the equation. Setting this value to 1
@@ -1491,7 +1491,7 @@ session.gc_probability = 1
 ; http://php.net/session.gc-divisor
 session.gc_divisor = 1000
 
-; After this number of seconds, stored data will be seen as 'garbage' and
+; After this number of seconds, stored data will be seen as ''garbage'' and
 ; cleaned up by the garbage collection process.
 ; http://php.net/session.gc-maxlifetime
 session.gc_maxlifetime = 1440
@@ -1517,7 +1517,7 @@ session.referer_check =
 ; Specified here to create the session id.
 ; http://php.net/session.entropy-file
 ; Defaults to /dev/urandom
-; On systems that don't have /dev/urandom but do have /dev/arandom, this will default to /dev/arandom
+; On systems that don''t have /dev/urandom but do have /dev/arandom, this will default to /dev/arandom
 ; If neither are found at compile time, the default is no entropy file.
 ; On windows, setting the entropy_length setting will activate the
 ; Windows random source (using the CryptoAPI)
@@ -1533,14 +1533,14 @@ session.cache_limiter = nocache
 session.cache_expire = 180
 
 ; trans sid support is disabled by default.
-; Use of trans sid may risk your users' security.
+; Use of trans sid may risk your users'' security.
 ; Use this option with caution.
 ; - User may send URL contains active session ID
 ;   to other person via. email/irc/etc.
 ; - URL that contains active session ID may be stored
 ;   in publicly accessible computer.
 ; - User may access your site with the same session ID
-;   always using URL stored in browser's history or bookmarks.
+;   always using URL stored in browser''s history or bookmarks.
 ; http://php.net/session.use-trans-sid
 session.use_trans_sid = 0
 
@@ -1659,7 +1659,7 @@ mssql.compatibility_mode = Off
 ; Specify how datetime and datetim4 columns are returned
 ; On => Returns data converted to SQL server settings
 ; Off => Returns values as YYYY-MM-DD hh:mm:ss
-;mssql.datetimeconvert = On
+mssql.datetimeconvert = Off
 
 ; Use NT authentication when connecting to the server
 mssql.secure_connection = Off
@@ -1683,7 +1683,7 @@ mssql.secure_connection = Off
 ; http://php.net/assert.warning
 ;assert.warning = On
 
-; Don't bail out by default.
+; Don''t bail out by default.
 ; http://php.net/assert.bail
 ;assert.bail = Off
 
@@ -1747,7 +1747,7 @@ mssql.secure_connection = Off
 ; mb_output_handler must be registered as output buffer to function.
 ; If empty, default_charset or output_encoding or mbstring.http_output is used.
 ; The precedence is: default_charset < output_encoding < mbstring.http_output
-; To use an output encoding conversion, mbstring's output handler must be set
+; To use an output encoding conversion, mbstring''s output handler must be set
 ; otherwise output encoding conversion cannot be performed.
 ; http://php.net/mbstring.http-output
 ;mbstring.http_output =
@@ -1915,7 +1915,7 @@ ldap.max_links = -1
 
 ; If disabled, PHPDoc comments are not loaded from SHM, so "Doc Comments"
 ; may be always stored (save_comments=1), but not loaded by applications
-; that don't need them anyway.
+; that don''t need them anyway.
 ;opcache.load_comments=1
 
 ; If enabled, a fast shutdown sequence is used for the accelerated code
