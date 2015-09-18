@@ -1,3 +1,5 @@
+include pget
+
 # == Define: php::unzip
 #
 # Extracts a ZIP archive on a Windows system.
@@ -156,26 +158,31 @@ class php::install (
         unless  => 'reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\11.0\VC\Runtimes\x64 /v Installed /f 1',
       }
 
-      # Download PHP (http://windows.php.net/downloads/releases/php-5.6.12-nts-Win32-VC11-x64.zip)
-      debug('Download PHP')
-      download_file('php-5.6.12-nts-Win32-VC11-x64.zip', 'http://windows.php.net/downloads/releases/', $cache_dir, '', '')
+      # Download PHP
+      pget {'Download PHP':
+        source => 'http://windows.php.net/downloads/releases/php-5.6.13-nts-Win32-VC11-x64.zip',
+        target => $cache_dir,
+      }
+
+      # Check download file?
 
       # Unzip to C:\PHP
-      php::unzip {"${cache_dir}/php-5.6.12-nts-Win32-VC11-x64.zip":
+      php::unzip {"${cache_dir}/php-5.6.13-nts-Win32-VC11-x64.zip":
         destination => 'C:/PHP',
         creates     => 'C:/PHP/php.ini-production',
+        require     => Pget['Download PHP'],
       }
 
       # Add C:\PHP to PATH
       php::path {'C:\PHP':
-        require => Unzip["${cache_dir}/php-5.6.12-nts-Win32-VC11-x64.zip"],
+        require => Unzip["${cache_dir}/php-5.6.13-nts-Win32-VC11-x64.zip"],
       }
       
       # Copy php.ini template
       file {'C:\\PHP\\php.ini':
         ensure  => file,
         content => template('php/php.ini.erb'),
-        require => Unzip["${cache_dir}/php-5.6.12-nts-Win32-VC11-x64.zip"],
+        require => Unzip["${cache_dir}/php-5.6.13-nts-Win32-VC11-x64.zip"],
       }
 
       # Create IIS FactCGI process pool
