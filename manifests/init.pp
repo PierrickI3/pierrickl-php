@@ -146,9 +146,10 @@ class php::install (
   {
     installed:
     {
-      # Check if Microsoft C++ runtime is installed. If not, download and install it
-      debug('Download Microsoft C++ runtime')
-      download_file('vcredist_x64.exe', 'http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/', $cache_dir, '', '')
+      pget {'Download Visual C++ runtime':
+        source => 'http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU_4/vcredist_x64.exe',
+        target => $cache_dir,
+      }
 
       debug('Install Microsoft C++ Runtime')
       exec {'microsoft-c-runtime-install':
@@ -156,6 +157,7 @@ class php::install (
         path    => $::path,
         cwd     => $::system32,
         unless  => 'reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\VisualStudio\11.0\VC\Runtimes\x64 /v Installed /f 1',
+        require => PGet['Download Visual C++ runtime'],
       }
 
       # Download PHP
@@ -163,8 +165,6 @@ class php::install (
         source => 'http://windows.php.net/downloads/releases/php-5.6.13-nts-Win32-VC11-x64.zip',
         target => $cache_dir,
       }
-
-      # Check download file?
 
       # Unzip to C:\PHP
       php::unzip {"${cache_dir}/php-5.6.13-nts-Win32-VC11-x64.zip":
