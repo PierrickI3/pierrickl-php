@@ -175,14 +175,14 @@ class php::install (
 
       # Add C:\PHP to PATH
       php::path {'C:\PHP':
-        require => Unzip["${cache_dir}/php-5.6.13-nts-Win32-VC11-x64.zip"],
+        require => Php::Unzip["${cache_dir}/php-5.6.13-nts-Win32-VC11-x64.zip"],
       }
       
       # Copy php.ini template
       file {'C:\\PHP\\php.ini':
         ensure  => file,
         content => template('php/php.ini.erb'),
-        require => Unzip["${cache_dir}/php-5.6.13-nts-Win32-VC11-x64.zip"],
+        require => Php::Unzip["${cache_dir}/php-5.6.13-nts-Win32-VC11-x64.zip"],
       }
 
       # Create IIS FactCGI process pool
