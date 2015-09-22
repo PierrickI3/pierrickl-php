@@ -4,3 +4,4 @@
 2015-08-31: Change php.ini settings based on SugarCRM tips when used with MSSQL
 2015-09-18: Updated PHP version
 2015-09-21: Fixes
+2015-09-22: Fixing dependencies
