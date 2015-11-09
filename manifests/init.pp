@@ -162,12 +162,14 @@ class php::install (
 
       # Download PHP
       pget {'Download PHP':
-        source => 'http://windows.php.net/downloads/releases/php-5.6.15-nts-Win32-VC11-x64.zip',
-        target => $cache_dir,
+        source         => 'http://windows.php.net/downloads/releases/php-5.6.15-nts-Win32-VC11-x64.zip',
+        target         => $cache_dir,
+        targetfilename => 'php.zip',
+        overwrite      => true,
       }
 
       # Unzip to C:\PHP
-      php::unzip {"${cache_dir}/php-5.6.15-nts-Win32-VC11-x64.zip":
+      php::unzip {"${cache_dir}/php.zip":
         destination => 'C:/PHP',
         creates     => 'C:/PHP/php.ini-production',
         require     => Pget['Download PHP'],
@@ -175,14 +177,14 @@ class php::install (
 
       # Add C:\PHP to PATH
       php::path {'C:\PHP':
-        require => Php::Unzip["${cache_dir}/php-5.6.15-nts-Win32-VC11-x64.zip"],
+        require => Php::Unzip["${cache_dir}/php.zip"],
       }
 
       # Copy php.ini template
       file {'C:\\PHP\\php.ini':
         ensure  => file,
         content => template('php/php.ini.erb'),
-        require => Php::Unzip["${cache_dir}/php-5.6.15-nts-Win32-VC11-x64.zip"],
+        require => Php::Unzip["${cache_dir}/php.zip"],
       }
 
       # Create IIS FactCGI process pool
