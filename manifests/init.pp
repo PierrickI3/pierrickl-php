@@ -162,7 +162,7 @@ class php::install (
 
       # Download PHP
       pget {'Download PHP':
-        source         => 'http://windows.php.net/downloads/releases/php-5.6.15-nts-Win32-VC11-x64.zip',
+        source         => 'http://windows.php.net/downloads/releases/php-5.6.16-nts-Win32-VC11-x64.zip',
         target         => $cache_dir,
         targetfilename => 'php.zip',
         overwrite      => true,
