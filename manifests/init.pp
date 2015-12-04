@@ -160,9 +160,12 @@ class php::install (
         require => PGet['Download Visual C++ runtime'],
       }
 
+      $latestversion = latest_php('5.6')
+      debug("LATEST VERSION ============== ${latestversion}")
+
       # Download PHP
       pget {'Download PHP':
-        source         => 'http://windows.php.net/downloads/releases/php-5.6.16-nts-Win32-VC11-x64.zip',
+        source         => "http://windows.php.net/downloads/releases/${latestversion}",
         target         => $cache_dir,
         targetfilename => 'php.zip',
         overwrite      => true,
