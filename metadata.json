@@ -1,6 +1,6 @@
 {
   "name": "PierrickL-php",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "author": "Pierrick Lozach",
   "summary": "Installs PHP on Windows",
   "license": "Apache-2.0",
